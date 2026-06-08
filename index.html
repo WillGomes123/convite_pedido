@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Um convite irrecusável...</title>
+    <style>
+        :root {
+            --primary: #ff477e;
+            --primary-hover: #ff0a54;
+            --bg: #ffe5ec;
+            --text: #4a001e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffd6e8 30%, #ffc2d8 55%, #ffb3c6 80%, #ffd6e8 100%);
+            background-size: 400% 400%;
+            animation: gayGradient 15s ease infinite;
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        @keyframes gayGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Camada de fundo para os efeitos flutuantes */
+        .fx-layer {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Corações subindo */
+        .floating-heart {
+            position: absolute;
+            bottom: -60px;
+            font-size: 2rem;
+            animation: floatUp linear infinite;
+            opacity: 0.8;
+            user-select: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Imagens girando e atravessando a tela */
+        .floating-img {
+            position: absolute;
+            bottom: -340px;
+            object-fit: contain;
+            opacity: 0.9;
+            animation: imgFloatUp linear infinite;
+        }
+
+        @keyframes imgFloatUp {
+            0% {
+                transform: translateY(0) scale(0.9);
+                opacity: 0;
+            }
+            12% { opacity: 0.9; }
+            88% { opacity: 0.9; }
+            100% {
+                transform: translateY(-140vh) scale(1.05);
+                opacity: 0;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(255, 71, 126, 0.35);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s ease;
+            border: 3px solid rgba(255, 71, 126, 0.3);
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, #ff0a54, #ff477e, #ff8fab, #ff0a54);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Emojis precisam escapar do gradiente do título pra aparecerem coloridos */
+        h2 .emoji {
+            -webkit-text-fill-color: initial;
+            background: none;
+            -webkit-background-clip: initial;
+            background-clip: initial;
+        }
+
+        .meme-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            min-height: 60px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, font-size 0.3s, padding 0.3s;
+        }
+
+        .btn-yes {
+            background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 10, 84, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-no {
+            background-color: #ced4da;
+            color: #495057;
+            position: relative;
+            z-index: 50;
+        }
+
+        /* Grid de opções de comida */
+        .food-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .food-option {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .food-option.selected {
+            background-color: #ffb3c6;
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
+        /* Estilo customizado simples para o Calendário de Julho/2026 */
+        .calendar-container {
+            margin: 20px 0;
+        }
+
+        .calendar-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .cal-day-name {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #888;
+        }
+
+        .cal-day {
+            padding: 8px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .cal-day:hover:not(.empty) {
+            background: #ffe5ec;
+        }
+
+        .cal-day.selected {
+            background: var(--primary) !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        .cal-day.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .period-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .period-option {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .period-option.selected {
+            background-color: #ffb3c6;
+            border-color: var(--primary);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            margin-top: 5px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Camada de efeitos: corações e imagens flutuantes -->
+    <div class="fx-layer" id="fxLayer"></div>
+
+    <div class="card">
+        <div id="step1" class="step active">
+            <h2>Aceita sair comigo de verdade? <span class="emoji">🥺💕</span></h2>
+            <img src="busco namoro.jpg" class="meme-img" alt="Busco namoro">
+            <div class="btn-container" id="btnContainer1">
+                <button class="btn-yes" id="btnYes" onclick="nextStep(2)">Com certeza! Sim! ❤️</button>
+                <button class="btn-no" id="btnNo" onclick="evadeNo()">Não</button>
+            </div>
+        </div>
+
+        <div id="step2" class="step">
+            <h2>SABIA QUE IA ACEITAR! Sabia! <span class="emoji">😂❤️</span></h2>
+            <img src="download (1).jpg" class="meme-img" alt="Snoop romântico">
+            <p style="font-size: 0.95rem; margin-bottom: 10px;">Escolha o melhor dia de <b>Julho</b> para a gente:</p>
+
+            <div class="calendar-container">
+                <div class="calendar-header">Julho 2026</div>
+                <div class="calendar-grid">
+                    <div class="cal-day-name">D</div><div class="cal-day-name">S</div><div class="cal-day-name">T</div>
+                    <div class="cal-day-name">Q</div><div class="cal-day-name">Q</div><div class="cal-day-name">S</div>
+                    <div class="cal-day-name">S</div>
+
+                    <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+
+                    <script>
+                        for(let i=1; i<=31; i++) {
+                            document.write(`<div class="cal-day" onclick="selectDay(this, ${i})">${i}</div>`);
+                        }
+                    </script>
+                </div>
+            </div>
+
+            <p style="font-size: 0.95rem; margin-bottom: 5px;">Prefere qual período?</p>
+            <div class="period-container">
+                <div class="period-option" id="per-dia" onclick="selectPeriod('Dia')">☀️ Dia</div>
+                <div class="period-option" id="per-noite" onclick="selectPeriod('Noite')">🌙 Noite</div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-yes" onclick="checkStep2()">Próximo passo ➔</button>
+            </div>
+        </div>
+
+        <div id="step3" class="step">
+            <h2>E para comer, o que você prefere? <span class="emoji">🌹</span></h2>
+            <img src="busco namoro.jpg" class="meme-img" id="foodMeme" alt="Busco namoro">
+
+            <div class="food-grid">
+                <div class="food-option" onclick="selectFood(this, 'Sushi 🍣')">Sushi 🍣</div>
+                <div class="food-option" onclick="selectFood(this, 'Hambúrguer 🍔')">Hambúrguer 🍔</div>
+                <div class="food-option" onclick="selectFood(this, 'Pastelzinho 🥟')">Pastelzinho 🥟</div>
+                <div class="food-option" onclick="selectFood(this, 'Pizza 🍕')">Pizza 🍕</div>
+                <div class="food-option" onclick="selectFood(this, 'Rodízio de Massas 🍝')">Rodízio Massas 🍝</div>
+                <div class="food-option" onclick="selectFood(this, 'Churrasco 🥩')">Churrasco 🥩</div>
+            </div>
+
+            <div style="text-align: left; margin-bottom: 20px;">
+                <label style="font-size: 0.9rem; font-weight: bold;">Outra preferência:</label>
+                <input type="text" id="customFood" placeholder="Ex: Açaí, Tacacá, Sorvete..." oninput="clearFoodSelection()">
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-yes" onclick="finishAndSend()">Confirmar Tudo! ❤️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedDay = null;
+        let selectedPeriod = null;
+        let selectedFood = null;
+
+        // ====== Lista de imagens para os efeitos de fundo ======
+        const allImages = [
+            "amardemais.jpg", "bah (1).jpg", "bah (2).jpg", "bah (3).jpg",
+            "busco namoro.jpg", "download (1).jpg", "download (2).jpg",
+            "download (3).jpg", "download.jpg", "ejej.jpg", "hi.jpg",
+            "oi posso falar sem texto.jpg", "romantico.jpg", "😳.jpg"
+        ];
+
+        const heartEmojis = ["❤️", "💖", "💕", "💗", "💓", "💞", "🥰", "🌸", "✨", "🩷", "🦋"];
+
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        // Cria um coração subindo
+        function spawnHeart() {
+            const fx = document.getElementById('fxLayer');
+            const h = document.createElement('div');
+            h.className = 'floating-heart';
+            h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            h.style.left = rand(0, 100) + 'vw';
+            h.style.fontSize = rand(1.2, 3) + 'rem';
+            const dur = rand(5, 11);
+            h.style.animationDuration = dur + 's';
+            fx.appendChild(h);
+            setTimeout(() => h.remove(), dur * 1000);
+        }
+
+        // Cria uma imagem atravessando a tela girando
+        function spawnImage() {
+            const fx = document.getElementById('fxLayer');
+            const img = document.createElement('img');
+            img.className = 'floating-img';
+            img.src = allImages[Math.floor(Math.random() * allImages.length)];
+            img.alt = '';
+            img.style.left = rand(0, 80) + 'vw';
+            const size = rand(120, 300);
+            img.style.width = size + 'px';
+            img.style.height = 'auto';
+            const dur = rand(14, 26); // sobe bem devagar
+            img.style.animationDuration = dur + 's';
+            fx.appendChild(img);
+            setTimeout(() => img.remove(), dur * 1000);
+        }
+
+        // Inicia os efeitos contínuos
+        setInterval(spawnHeart, 450);
+        setInterval(spawnImage, 1600);
+        // Alguns já no carregamento
+        for (let i = 0; i < 6; i++) setTimeout(spawnHeart, i * 200);
+        for (let i = 0; i < 3; i++) setTimeout(spawnImage, i * 500);
+
+        function nextStep(stepNum) {
+            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step${stepNum}`).classList.add('active');
+            // Explosão de corações na transição
+            for (let i = 0; i < 15; i++) setTimeout(spawnHeart, i * 60);
+        }
+
+        // ====== Botão NÃO fugindo + botão SIM crescendo ======
+        const noPhrases = [
+            "Tem certeza? 🥺",
+            "Botão quebrou, clica no Sim!",
+            "Para com isso 😂",
+            "Só clica no Sim aí, pô!",
+            "Aiii vai!",
+            "Impossível clicar 💅",
+            "O Sim tá te chamando 👀",
+            "Desiste, vai dar Sim ❤️",
+            "Você não vai conseguir 🥺"
+        ];
+        let phraseIndex = 0;
+        let yesScale = 1;
+
+        function evadeNo() {
+            const btnNo = document.getElementById('btnNo');
+            const btnYes = document.getElementById('btnYes');
+
+            // O Não fica PARADO do lado do Sim, só troca os avisos a cada apertada
+            btnNo.innerText = noPhrases[phraseIndex];
+            phraseIndex = (phraseIndex + 1) % noPhrases.length;
+
+            // O botão SIM vai ficando maior aos pouquinhos (gradual)
+            yesScale = Math.min(yesScale + 0.07, 2.6);
+            btnYes.style.fontSize = (1 * yesScale) + 'rem';
+            btnYes.style.padding = (12 * yesScale) + 'px ' + (25 * yesScale) + 'px';
+
+            // O Não vai encolhendo de leve, devagar
+            const noScale = Math.max(1 - (phraseIndex * 0.03), 0.7);
+            btnNo.style.fontSize = noScale + 'rem';
+        }
+
+        // Seleção do Calendário
+        function selectDay(element, day) {
+            document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedDay = day;
+        }
+
+        // Seleção do Período
+        function selectPeriod(period) {
+            document.getElementById('per-dia').classList.remove('selected');
+            document.getElementById('per-noite').classList.remove('selected');
+
+            if(period === 'Dia') {
+                document.getElementById('per-dia').classList.add('selected');
+            } else {
+                document.getElementById('per-noite').classList.add('selected');
+            }
+            selectedPeriod = period;
+        }
+
+        function checkStep2() {
+            if(!selectedDay || !selectedPeriod) {
+                alert("Escolha o dia e o período (Dia ou Noite) antes de continuar! 😉");
+                return;
+            }
+            nextStep(3);
+        }
+
+        // Seleção de Comida
+        function selectFood(element, food) {
+            document.querySelectorAll('.food-option').forEach(f => f.classList.remove('selected'));
+            document.getElementById('customFood').value = ''; // Limpa o campo escrito se clicou num botão
+            element.classList.add('selected');
+            selectedFood = food;
+
+            // Easter egg mudando os memes dinamicamente conforme ela avança
+            const memeImg = document.getElementById('foodMeme');
+            if(food.includes('Sushi') || food.includes('Massas')) {
+                memeImg.src = 'ejej.jpg';
+            } else if (food.includes('Churrasco')) {
+                memeImg.src = '😳.jpg';
+            } else {
+                memeImg.src = 'bah (1).jpg';
+            }
+        }
+
+        function clearFoodSelection() {
+            document.querySelectorAll('.food-option').forEach(f => f.classList.remove('selected'));
+            selectedFood = null;
+            document.getElementById('foodMeme').src = 'oi posso falar sem texto.jpg';
+        }
+
+        // Formata e envia os dados para o WhatsApp
+        function finishAndSend() {
+            let finalFood = selectedFood;
+            const custom = document.getElementById('customFood').value.trim();
+
+            if(custom) {
+                finalFood = custom;
+            }
+
+            if(!finalFood) {
+                alert("Escolha o que quer comer, não vale passar fome!");
+                return;
+            }
+
+            // Coloque seu número do whatsapp aqui no formato: 55 + DDD + Numero (Tudo junto, sem espaços ou traços)
+            const seuWhatsapp = "5592999999999";
+
+            const mensagem = `Oii! Passei no seu site e aceitei o convite! 🥰💕%0A%0A🗓️ *Data:* Julho, Dia ${selectedDay}%0A⏰ *Período:* ${selectedPeriod}%0A🍕 *Para comer:* ${finalFood}%0A%0AJá vai combinando os detalhes aí! ❤️`;
+
+            const url = `https://api.whatsapp.com/send?phone=${seuWhatsapp}&text=${mensagem}`;
+
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
