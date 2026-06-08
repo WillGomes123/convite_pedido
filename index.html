@@ -309,7 +309,7 @@
     <div class="card">
         <div id="step1" class="step active">
             <h2>Aceita sair comigo de verdade? <span class="emoji">🥺💕</span></h2>
-            <img src="busco namoro.jpg" class="meme-img" alt="Busco namoro">
+            <img src="busco-namoro.jpg" class="meme-img" alt="Busco namoro">
             <div class="btn-container" id="btnContainer1">
                 <button class="btn-yes" id="btnYes" onclick="nextStep(2)">Com certeza! Sim! ❤️</button>
                 <button class="btn-no" id="btnNo" onclick="evadeNo()">Não</button>
@@ -318,7 +318,7 @@
 
         <div id="step2" class="step">
             <h2>SABIA QUE IA ACEITAR! Sabia! <span class="emoji">😂❤️</span></h2>
-            <img src="download (1).jpg" class="meme-img" alt="Snoop romântico">
+            <img src="download1.jpg" class="meme-img" alt="Snoop romântico">
             <p style="font-size: 0.95rem; margin-bottom: 10px;">Escolha o melhor dia de <b>Julho</b> para a gente:</p>
 
             <div class="calendar-container">
@@ -351,7 +351,7 @@
 
         <div id="step3" class="step">
             <h2>E para comer, o que você prefere? <span class="emoji">🌹</span></h2>
-            <img src="busco namoro.jpg" class="meme-img" id="foodMeme" alt="Busco namoro">
+            <img src="busco-namoro.jpg" class="meme-img" id="foodMeme" alt="Busco namoro">
 
             <div class="food-grid">
                 <div class="food-option" onclick="selectFood(this, 'Sushi 🍣')">Sushi 🍣</div>
@@ -380,10 +380,10 @@
 
         // ====== Lista de imagens para os efeitos de fundo ======
         const allImages = [
-            "amardemais.jpg", "bah (1).jpg", "bah (2).jpg", "bah (3).jpg",
-            "busco namoro.jpg", "download (1).jpg", "download (2).jpg",
-            "download (3).jpg", "download.jpg", "ejej.jpg", "hi.jpg",
-            "oi posso falar sem texto.jpg", "romantico.jpg", "😳.jpg"
+            "amardemais.jpg", "bah1.jpg", "bah2.jpg", "bah3.jpg",
+            "busco-namoro.jpg", "download1.jpg", "download2.jpg",
+            "download3.jpg", "download.jpg", "ejej.jpg", "hi.jpg",
+            "oi-posso-falar.jpg", "romantico.jpg", "surpreso.jpg"
         ];
 
         const heartEmojis = ["❤️", "💖", "💕", "💗", "💓", "💞", "🥰", "🌸", "✨", "🩷", "🦋"];
@@ -508,16 +508,16 @@
             if(food.includes('Sushi') || food.includes('Massas')) {
                 memeImg.src = 'ejej.jpg';
             } else if (food.includes('Churrasco')) {
-                memeImg.src = '😳.jpg';
+                memeImg.src = 'surpreso.jpg';
             } else {
-                memeImg.src = 'bah (1).jpg';
+                memeImg.src = 'bah1.jpg';
             }
         }
 
         function clearFoodSelection() {
             document.querySelectorAll('.food-option').forEach(f => f.classList.remove('selected'));
             selectedFood = null;
-            document.getElementById('foodMeme').src = 'oi posso falar sem texto.jpg';
+            document.getElementById('foodMeme').src = 'oi-posso-falar.jpg';
         }
 
         // Formata e envia os dados para o WhatsApp
@@ -535,7 +535,7 @@
             }
 
             // Coloque seu número do whatsapp aqui no formato: 55 + DDD + Numero (Tudo junto, sem espaços ou traços)
-            const seuWhatsapp = "5592999999999";
+            const seuWhatsapp = "5592984697229";
 
             const mensagem = `Oii! Passei no seu site e aceitei o convite! 🥰💕%0A%0A🗓️ *Data:* Julho, Dia ${selectedDay}%0A⏰ *Período:* ${selectedPeriod}%0A🍕 *Para comer:* ${finalFood}%0A%0AJá vai combinando os detalhes aí! ❤️`;
 
